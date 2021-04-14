@@ -136,7 +136,6 @@ namespace Coffee.UISoftMask
             modifiedMaterial = MaterialCache.Register(baseMaterial, _effectMaterialHash, mat =>
             {
                 mat.shader = Shader.Find(string.Format("Hidden/{0} (SoftMaskable)", mat.shader.name));
-                mat.SetTexture(s_SoftMaskTexId, softMask.softMaskBuffer);
                 mat.SetInt(s_StencilCompId, m_UseStencil ? (int) CompareFunction.Equal : (int) CompareFunction.Always);
 
 #if UNITY_EDITOR
@@ -153,7 +152,9 @@ namespace Coffee.UISoftMask
                     4 <= stencil ? (m_MaskInteraction >> 6 & 0x3) : 0
                 ));
             });
-
+            
+            modifiedMaterial.SetTexture(s_SoftMaskTexId, softMask.softMaskBuffer);
+            
             // Unregister the previous material.
             MaterialCache.Unregister(previousHash);
 
